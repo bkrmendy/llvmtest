@@ -6,6 +6,7 @@ import Foreign.Ptr
 import LLVM
 import LLVM.Analysis
 import LLVM.AST
+import LLVM.AST.AddrSpace
 import LLVM.AST.CallingConvention
 import LLVM.AST.Global
 import LLVM.AST.Linkage
@@ -28,7 +29,7 @@ int64type :: Type
 int64type = IntegerType 64
 
 printT :: Type
-printT = FunctionType VoidType [int64type] False
+printT = PointerType (FunctionType int64type [int64type] False) (AddrSpace 0)
 
 passes :: PassSetSpec
 passes = defaultCuratedPassSetSpec { optLevel = Just 3 }
@@ -71,7 +72,7 @@ main = do
 
         instrs      = [ (nameTmp1 := tmp1), (nameSum := sum), (printItLabel := printit), (printItLabel2 := printit2) ]
 
-        mainblock   = BasicBlock (Name "hello") instrs (UnName 3 := Ret (Just $ ASTO.ConstantOperand success) [])
+        mainblock   = BasicBlock (Name "hello") instrs (Do $ Ret (Just $ ASTO.ConstantOperand success) [])
 
         moduleDef   = GlobalDefinition $ functionDefaults {
                             name        = Name "haskmain"
