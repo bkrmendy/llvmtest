@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: nightly-2017-07-03
+resolver: lts-14.23
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -39,10 +39,14 @@ packages:
 - '.'
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+  - llvm-hs-9.0.1
+  - llvm-hs-pure-9.0.0
 
 # Override default flag values for local packages and extra-deps
-flags: {}
+flags:
+  llvm-hs:
+    shared-llvm: true
 
 # Extra package databases containing global packages
 extra-package-dbs: []
@@ -64,11 +68,4 @@ extra-package-dbs: []
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
-
-nix:
-        packages:
-                - zlib
-                - llvm_4
-        enable: true
-        pure: true
 
